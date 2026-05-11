@@ -118,11 +118,11 @@ We are building a **full Laravel E-Commerce System** as a class, split across 5 
 |---|---|
 | Framework | Laravel 13 | `composer update` |
 | PHP Version | PHP 8.5 | `winget update PHP.PHP.8.5` |
-| Database | MySQL |
-| Authentication | Laravel Breeze + Sanctum |
-| Frontend | Blade Templates + Tailwind CSS |
-| Version Control | Git (one shared repo) |
-| Local Dev | Laravel Herd or XAMPP |
+| Database | MySQL | |
+| Authentication | Laravel Breeze + Sanctum | |
+| Frontend | Blade Templates + Tailwind CSS | |
+| Version Control | Git (one shared repo) | |
+| Local Dev | Laravel Herd or XAMPP | |
 
 ### The 5 Modules
 
