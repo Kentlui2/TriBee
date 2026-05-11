@@ -1,5 +1,3 @@
-# ecomerce-bsit3b_ProjectPlan
-
 # 🛒 Laravel E-Commerce System — Class Project Plan
 
 > **Read this before writing a single line of code.**
@@ -16,11 +14,12 @@
 4. [Folder Structure](#4-folder-structure)
 5. [Database & ERD](#5-database--erd)
 6. [API Contracts Between Groups](#6-api-contracts-between-groups)
-7. [Git Strategy](#7-git-strategy)
-8. [Milestone & Timeline](#8-milestone--timeline)
-9. [Do's and Don'ts](#9-dos-and-donts)
-10. [Communication Rules](#10-communication-rules)
-11. [Group Leader Responsibilities](#11-group-leader-responsibilities)
+7. [Setup & Installation Guide](#7-setup--installation-guide)
+8. [Git Strategy & Essential Commands](#8-git-strategy--essential-commands)
+9. [Milestone & Timeline](#9-milestone--timeline)
+10. [Do's and Don'ts](#10-dos-and-donts)
+11. [Communication Rules](#11-communication-rules)
+12. [Group Leader Responsibilities](#12-group-leader-responsibilities)
 
 ---
 
@@ -32,8 +31,8 @@ We are building a **full Laravel E-Commerce System** as a class, split across 5 
 
 | Item | Choice |
 |---|---|
-| Framework | Laravel 13 |
-| PHP Version | PHP 8.5 |
+| Framework | Laravel 11 |
+| PHP Version | PHP 8.2+ |
 | Database | MySQL |
 | Authentication | Laravel Breeze + Sanctum |
 | Frontend | Blade Templates + Tailwind CSS |
@@ -401,12 +400,153 @@ $userId = auth()->id();
 
 ---
 
-## 7. Git Strategy
+## 7. Setup & Installation Guide
+
+> Every member of every group must complete this before the first coding session.
+
+### Step 1 — Install Required Software
+
+Install all of these on your machine. Click the links or search for them.
+
+| Software | Purpose | Download |
+|---|---|---|
+| **PHP 8.2+** | Run Laravel | https://www.php.net/downloads |
+| **Composer** | PHP package manager | https://getcomposer.org |
+| **Node.js (LTS)** | Frontend assets (Tailwind) | https://nodejs.org |
+| **Git** | Version control | https://git-scm.com |
+| **MySQL** | Database | comes with XAMPP |
+| **XAMPP** | Local server (Apache + MySQL) | https://www.apachefriends.org |
+| **VS Code** | Code editor (recommended) | https://code.visualstudio.com |
+
+> **Windows users:** After installing PHP, make sure to add it to your system PATH so you can run `php` in the terminal.
+
+### Step 2 — Verify Your Installs
+
+Open your terminal (Command Prompt, PowerShell, or Git Bash) and run these. Each should print a version number — if it says "command not found", the install didn't work.
+
+```bash
+php --version
+# Expected: PHP 8.2.x or higher
+
+composer --version
+# Expected: Composer version 2.x.x
+
+node --version
+# Expected: v20.x.x or higher
+
+npm --version
+# Expected: 10.x.x or higher
+
+git --version
+# Expected: git version 2.x.x
+```
+
+### Step 3 — Configure Git Identity (first time only)
+
+Every member must do this once. This is what shows up on your commits so the team knows who did what.
+
+```bash
+git config --global user.name "Your Full Name"
+git config --global user.email "your@email.com"
+
+# Verify it saved
+git config --global --list
+```
+
+### Step 4 — Clone the Project Repo
+
+The repo link will be shared by the group leader who sets it up (G1). Once you have it:
+
+```bash
+# Clone the repo to your machine
+git clone https://github.com/your-class/ecommerce-app.git
+
+# Go into the project folder
+cd ecommerce-app
+```
+
+### Step 5 — Install Project Dependencies
+
+```bash
+# Install PHP packages (Laravel and all libraries)
+composer install
+
+# Install frontend packages (Tailwind, Vite, etc.)
+npm install
+```
+
+### Step 6 — Set Up Your Environment File
+
+```bash
+# Copy the example env file
+cp .env.example .env
+
+# Generate the app key (required for Laravel to work)
+php artisan key:generate
+```
+
+Then open `.env` in VS Code and update your database credentials:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ecommerce_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+> **Note:** `DB_PASSWORD` is blank by default in XAMPP. If you set a password, put it here.
+
+### Step 7 — Set Up the Database
+
+1. Open XAMPP and start **Apache** and **MySQL**
+2. Go to `http://localhost/phpmyadmin`
+3. Create a new database named `ecommerce_db`
+4. Then run migrations:
+
+```bash
+# Run all migrations (creates all tables)
+php artisan migrate
+
+# Run seeders (fills tables with test data)
+php artisan db:seed
+```
+
+### Step 8 — Run the App
+
+You need two terminals open at the same time:
+
+```bash
+# Terminal 1 — starts the Laravel server
+php artisan serve
+# Visit: http://localhost:8000
+
+# Terminal 2 — compiles Tailwind CSS (keep this running while working)
+npm run dev
+```
+
+### VS Code Extensions (Recommended)
+
+Install these from the VS Code Extensions panel (`Ctrl+Shift+X`):
+
+| Extension | Why |
+|---|---|
+| **PHP Intelephense** | PHP autocomplete and error detection |
+| **Laravel Blade Snippets** | Blade template helpers |
+| **Tailwind CSS IntelliSense** | Tailwind class autocomplete |
+| **GitLens** | See who wrote what line in Git |
+| **Prettier** | Auto-formats your code on save |
+| **PHP CS Fixer** | Enforces PHP code style |
+
+---
+
+## 8. Git Strategy & Essential Commands
 
 ### Branching Rules
 
 ```
-main        → stable, working code only. NO direct pushes.
+main        → stable, working code only. NO direct pushes ever.
 dev         → integration branch. All groups merge here.
 g1/feature  → G1's working branches (e.g. g1/login-page)
 g2/feature  → G2's working branches
@@ -415,50 +555,208 @@ g4/feature  → G4's working branches
 g5/feature  → G5's working branches
 ```
 
-### Workflow (every group follows this)
+---
+
+### Daily Workflow (every member follows this every day)
 
 ```bash
-# 1. Always start from dev
+# 1. Always start by pulling the latest changes from dev
 git checkout dev
 git pull origin dev
 
-# 2. Create your feature branch
-git checkout -b g2/product-crud
+# 2. Switch to your group's branch (or create one if new feature)
+git checkout g2/product-crud
+# OR create a new branch:
+git checkout -b g2/inventory-service
 
-# 3. Work on your feature, commit often
-git add .
-git commit -m "G2: add ProductController with index and show"
+# 3. Write your code, then stage your changes
+git add .                        # stage everything
+git add app/Modules/Products/    # OR stage only your folder (safer)
 
-# 4. Push your branch
-git push origin g2/product-crud
+# 4. Commit with a proper message
+git commit -m "G2: add InventoryService checkStock method"
 
-# 5. Create a Pull Request to dev — NOT to main
-# Ask your group leader to review before merging
+# 5. Push your branch to GitHub
+git push origin g2/inventory-service
+
+# 6. Go to GitHub → open a Pull Request → set target branch to dev
+# Tag your group leader to review
 ```
+
+---
+
+### Essential Git Commands Reference
+
+#### Checking Status
+
+```bash
+git status
+# Shows which files are modified, staged, or untracked
+
+git log --oneline
+# Shows recent commits in a compact list
+
+git log --oneline --graph --all
+# Shows all branches visually — great for seeing what everyone is doing
+
+git diff
+# Shows what changed in your files before staging
+```
+
+#### Branching
+
+```bash
+git branch
+# Lists all local branches (* = current branch)
+
+git branch -a
+# Lists all branches including remote ones
+
+git checkout dev
+# Switch to the dev branch
+
+git checkout -b g3/pricing-engine
+# Create a new branch AND switch to it
+
+git branch -d g3/old-feature
+# Delete a branch (only after it's merged)
+```
+
+#### Syncing with Remote
+
+```bash
+git fetch origin
+# Downloads latest changes WITHOUT merging — safe to run anytime
+
+git pull origin dev
+# Downloads AND merges latest dev into your current branch
+
+git push origin g2/product-crud
+# Uploads your branch to GitHub
+
+git push --set-upstream origin g2/new-feature
+# First push of a brand new branch
+```
+
+#### Staging & Committing
+
+```bash
+git add .
+# Stage all changes in the current folder
+
+git add app/Modules/Products/
+# Stage only your module's folder (recommended — avoids accidents)
+
+git add -p
+# Stage changes chunk by chunk — review before committing
+
+git commit -m "G2: create Product model with fillable fields"
+# Commit with a message
+
+git commit --amend -m "G2: fix typo in commit message"
+# Fix your LAST commit message (only before pushing)
+
+git reset HEAD~1
+# Undo your last commit but KEEP the file changes (soft undo)
+```
+
+#### Handling Merge Conflicts
+
+A merge conflict happens when two people edited the same file. Git will mark the conflict inside the file like this:
+
+```
+<<<<<<< HEAD
+Your version of the code
+=======
+Their version of the code
+>>>>>>> dev
+```
+
+To resolve it:
+
+```bash
+# Step 1 — pull the latest dev
+git pull origin dev
+
+# Step 2 — open the conflicting file in VS Code
+# Manually pick which version to keep (or combine both)
+# Delete the <<<, ===, >>> markers completely
+
+# Step 3 — after fixing, stage and commit
+git add .
+git commit -m "G2: resolve merge conflict in ProductController"
+```
+
+> **Rule:** If the conflict is in a file you don't own — stop. Tell the file's owner to resolve it.
+
+#### Undoing Mistakes
+
+```bash
+git checkout -- filename.php
+# Discard ALL changes to a file (goes back to last commit)
+# ⚠️ This is permanent — use carefully
+
+git stash
+# Temporarily hide your uncommitted changes (useful when switching branches)
+
+git stash pop
+# Bring back your stashed changes
+
+git revert abc1234
+# Create a new commit that undoes a specific commit (safe — keeps history)
+```
+
+#### Useful Shortcuts
+
+```bash
+git pull origin dev && git checkout -b g4/checkout-flow
+# Pull latest then immediately create a new branch in one line
+
+git log --oneline -10
+# See only the last 10 commits
+
+git show abc1234
+# See the full details of a specific commit
+
+git blame filename.php
+# See who wrote each line of a file (great for finding who to ask)
+```
+
+---
 
 ### Commit Message Format
 
 ```
 G[number]: short description of what you did
 
-Examples:
+✅ Good examples:
 G1: add login and registration pages
 G2: create Product model and migration
 G3: implement CartService addItem method
 G4: fix order status update bug
 G5: integrate PayMongo sandbox payment
+
+❌ Bad examples:
+fixed stuff
+wip
+asdfjkl
+G2: changes
 ```
-
-### Rules
-
-- **Never push directly to `main` or `dev`**
-- **Never edit another group's files**
-- Always `git pull origin dev` before starting new work
-- If you get a merge conflict in a file you don't own — stop and ask the owner to resolve it
 
 ---
 
-## 8. Milestone & Timeline
+### Git Rules Summary
+
+- **Never push directly to `main` or `dev`** — always use a branch + Pull Request
+- **Never edit another group's files** — stay inside your `Modules/` folder
+- **Always pull from `dev` before starting new work** — avoid outdated code
+- **Commit often, push daily** — don't sit on 3 days of uncommitted work
+- **If you get a conflict in someone else's file** — stop and ask them to fix it
+- **Never force push** (`git push --force`) — it can delete other people's work
+
+---
+
+## 9. Milestone & Timeline
 
 | Week | Milestone | Who |
 |---|---|---|
@@ -478,7 +776,7 @@ G5: integrate PayMongo sandbox payment
 
 ---
 
-## 9. Do's and Don'ts
+## 10. Do's and Don'ts
 
 ### ✅ DO's
 
@@ -517,7 +815,7 @@ G5: integrate PayMongo sandbox payment
 
 ---
 
-## 10. Communication Rules
+## 11. Communication Rules
 
 ### Group Leader Sync
 
@@ -554,7 +852,7 @@ If you need to change something that affects another group (table column, servic
 
 ---
 
-## 11. Group Leader Responsibilities
+## 12. Group Leader Responsibilities
 
 As a group leader, your job is **not just to code** — it's to manage.
 
