@@ -31,8 +31,8 @@ We are building a **full Laravel E-Commerce System** as a class, split across 5 
 
 | Item | Choice |
 |---|---|
-| Framework | Laravel 11 |
-| PHP Version | PHP 8.2+ |
+| Framework | Laravel 13 |
+| PHP Version | PHP 8.5 |
 | Database | MySQL |
 | Authentication | Laravel Breeze + Sanctum |
 | Frontend | Blade Templates + Tailwind CSS |
