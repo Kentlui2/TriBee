@@ -8,8 +8,7 @@
 
 ## 📋 Table of Contents
 
-0. [How to Start](#0-how-to-start)
-1. [Project Overview](#1-project-overview)
+1. [How to Start](#1-how-to-start)
 2. [Group Assignments & Boundaries](#2-group-assignments--boundaries)
 3. [Shared Standards — Agree Before Coding](#3-shared-standards--agree-before-coding)
 4. [Folder Structure](#4-folder-structure)
@@ -24,7 +23,35 @@
 
 ---
 
-## 0. How To Start
+## Project Overview
+
+We are building a **full Laravel E-Commerce System** as a class, split across 5 groups. Each group owns one module of the system. The app must work as one connected platform — not 5 separate apps.
+
+### Tech Stack (everyone must use the same)
+
+| Item | Choice | **if missing/wrong version**
+|---|---|---|
+| Framework | Laravel 13 | `composer update` |
+| PHP Version | PHP 8.5 | `winget update PHP.PHP.8.5` |
+| Database | MySQL | |
+| Authentication | Laravel Breeze + Sanctum | |
+| Frontend | Blade Templates + Tailwind CSS | |
+| Version Control | Git (one shared repo) | |
+| Local Dev | Laravel Herd or XAMPP | |
+
+### The 5 Modules
+
+| Group | Module |
+|---|---|
+| G1 | User Account & Authentication |
+| G2 | Product Catalog & Inventory |
+| G3 | Shopping Cart & Pricing Engine |
+| G4 | Order Management & Checkout |
+| G5 | Payment & Shipping Integration |
+
+---
+
+## 1. How To Start
 
 ***Every member must complete this setup before writing code.***
 
@@ -105,34 +132,6 @@ This installs:
 *Optional: seed sample data*
 
 `php artisan db:seed`
-
----
-
-## 1. Project Overview
-
-We are building a **full Laravel E-Commerce System** as a class, split across 5 groups. Each group owns one module of the system. The app must work as one connected platform — not 5 separate apps.
-
-### Tech Stack (everyone must use the same)
-
-| Item | Choice | **if missing/wrong version**
-|---|---|
-| Framework | Laravel 13 | `composer update` |
-| PHP Version | PHP 8.5 | `winget update PHP.PHP.8.5` |
-| Database | MySQL | |
-| Authentication | Laravel Breeze + Sanctum | |
-| Frontend | Blade Templates + Tailwind CSS | |
-| Version Control | Git (one shared repo) | |
-| Local Dev | Laravel Herd or XAMPP | |
-
-### The 5 Modules
-
-| Group | Module |
-|---|---|
-| G1 | User Account & Authentication |
-| G2 | Product Catalog & Inventory |
-| G3 | Shopping Cart & Pricing Engine |
-| G4 | Order Management & Checkout |
-| G5 | Payment & Shipping Integration |
 
 ---
 
