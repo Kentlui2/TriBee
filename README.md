@@ -114,10 +114,10 @@ We are building a **full Laravel E-Commerce System** as a class, split across 5 
 
 ### Tech Stack (everyone must use the same)
 
-| Item | Choice |
+| Item | Choice | **if missing/wrong version**
 |---|---|
-| Framework | Laravel 13 |
-| PHP Version | PHP 8.5 |
+| Framework | Laravel 13 | `composer update` |
+| PHP Version | PHP 8.5 | `winget update PHP.PHP.8.5` |
 | Database | MySQL |
 | Authentication | Laravel Breeze + Sanctum |
 | Frontend | Blade Templates + Tailwind CSS |
