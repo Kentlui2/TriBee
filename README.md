@@ -27,17 +27,23 @@
 
 We are building a **full Laravel E-Commerce System** as a class, split across 5 groups. Each group owns one module of the system. The app must work as one connected platform — not 5 separate apps.
 
-### Tech Stack (everyone must use the same)
+### Tech Stack
 
-| Item | Choice | **if missing/wrong version**
-|---|---|---|
-| Framework | Laravel 13 | `composer update` |
-| PHP Version | PHP 8.5 | `winget update PHP.PHP.8.5` |
-| Database | MySQL | |
-| Authentication | Laravel Breeze + Sanctum | |
-| Frontend | Blade Templates + Tailwind CSS | |
-| Version Control | Git (one shared repo) | |
-| Local Dev | Laravel Herd or XAMPP | |
+| Component                         | Required Version / Tool        | Purpose                               | If Missing or Wrong Version                                                                                                  |
+| --------------------------------- | ------------------------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Framework**                     | Laravel 13                     | Main backend framework                | Run: `composer update`                                                                                                       |
+| **PHP**                           | PHP 8.5+                       | Required to run Laravel 13            | install manually from:  <br>`https://www.php.net/downloads.php?os=windows&osvariant=windows-downloads&version=8.5` choose `Thread Safe` |
+| **Database**                      | MySQL 8+                       | Stores all application data           | Install XAMPP or MySQL Server                                                                                                |
+| **Authentication**                | Laravel Breeze + Sanctum       | Login, registration, session/API auth | Run:<br>`composer install`                                                                                                   |
+| **Frontend**                      | Blade Templates + Tailwind CSS | UI rendering and styling              | Run:<br>`npm install`                                                                                                        |
+| **Version Control**               | Git                            | Shared repository and collaboration   | Install from:<br>`https://git-scm.com/downloads`                                                                             |
+| **Package Manager**               | Composer 2+                    | Manages Laravel/PHP dependencies      | Install from:<br>`https://getcomposer.org`                                                                                   |
+| **JavaScript Runtime**            | Node.js LTS                    | Runs Vite and frontend tooling        | Install from:<br>`https://nodejs.org`                                                                                        |
+| **Local Development Environment** | Laravel Herd or XAMPP          | Local server and database environment | Install Herd or XAMPP                                                                                                        |
+| **Code Editor**                   | VS Code (Recommended)          | Development environment               | Install from:<br>`https://code.visualstudio.com`                                                                             |
+
+> **Important:** Everyone must use the same major versions to avoid compatibility problems, dependency conflicts, and build errors.
+
 
 ### The 5 Modules
 
