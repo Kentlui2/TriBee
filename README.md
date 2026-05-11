@@ -8,6 +8,7 @@
 
 ## 📋 Table of Contents
 
+0. [How to Start](#0-how-to-start)
 1. [Project Overview](#1-project-overview)
 2. [Group Assignments & Boundaries](#2-group-assignments--boundaries)
 3. [Shared Standards — Agree Before Coding](#3-shared-standards--agree-before-coding)
@@ -20,6 +21,90 @@
 10. [Do's and Don'ts](#10-dos-and-donts)
 11. [Communication Rules](#11-communication-rules)
 12. [Group Leader Responsibilities](#12-group-leader-responsibilities)
+
+---
+
+## 0. How To Start
+
+***Every member must complete this setup before writing code.***
+
+### Step 1 — Clone the Repository
+`git clone https://github.com/dmaasin24/ecomerce-bsit3b.git`
+### Step 2 — Go Into the Project Folder
+`cd ecomerce-bsit3b`
+### Step 3 — Fetch Your Assigned Branch
+
+**Replace BRANCH_NAME with your actual assigned branch.**
+
+| Group | Branch |
+|---|---|
+| G1 | `G1---User-Authentication` |
+| G2 | `G2---Product-Catalog-&-Inventory`|
+| G3 | `G3---Shopping-Cart-&-Pricing-Engine` |
+| G4 | `G4---Order-Management-&-Checkout` |
+| G5 | `G5---Payment-&-Shipping` |
+
+*Example:*
+
+`git fetch origin G3---Shopping-Cart-&-Pricing-Engine`
+
+### Step 4 — Switch To Your Branch
+`git switch -c "BRANCH_NAME" origin/"BRANCH_NAME"`
+
+*Example:*
+
+git switch -c "G3---Shopping-Cart-&-Pricing-Engine" origin/"G3---Shopping-Cart-&-Pricing-Engine"
+
+Quotes are required because branch names contain special characters like &.
+
+### Step 5 — Install Backend Dependencies
+`composer install`
+
+*This installs:*
+- Laravel
+- Breeze
+- Sanctum
+- All PHP packages
+
+### Step 6 — Install Frontend Dependencies
+`npm install`
+
+This installs:
+
+- Tailwind CSS
+- Vite
+- Frontend tooling
+
+### Step 7 — Configure Environment File
+
+`cp .env.example .env`
+
+**Generate the Laravel application key:**
+
+`php artisan key:generate`
+
+### Step 8 — Configure Database
+**Open .env and update:**
+
+`DB_CONNECTION=mysql`
+
+`DB_HOST=127.0.0.1`
+
+`DB_PORT=3306`
+
+`DB_DATABASE=ecommerce_db`
+
+`DB_USERNAME=root`
+
+`DB_PASSWORD=`
+
+
+### Step 9 — Run Migrations
+`php artisan migrate`
+
+*Optional: seed sample data*
+
+`php artisan db:seed`
 
 ---
 
