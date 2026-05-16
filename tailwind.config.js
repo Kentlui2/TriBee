@@ -12,7 +12,16 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                bee: {
+                    orange: '#F97316',
+                    dark:   '#1C1C1C',
+                    muted:  '#6B7280',
+                    light:  '#FFF7ED',
+                    border: '#E5E7EB',
+                }
             },
         },
     },

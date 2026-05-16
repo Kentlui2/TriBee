@@ -1,0 +1,36 @@
+<?php
+
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\IsAdmin;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Group 1 — Auth Module Routes
+|--------------------------------------------------------------------------
+*/
+
+// ── Protected (Authenticated) Routes ─────────────────
+Route::middleware([Authenticate::class])->group(function () {
+    
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', fn() => view('profile.dashboard'))->name('dashboard');
+        Route::get('/edit', fn() => view('profile.edit'))->name('edit');
+        Route::get('/addresses', fn() => view('profile.addresses'))->name('addresses');
+    });
+
+    Route::post('/logout', function () {
+        Auth::logout();
+        return redirect('/');
+    })->name('logout');
+});
+
+// ── Admin-Only Routes ────────────────────────────────
+Route::middleware([Authenticate::class, IsAdmin::class])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('/users', fn() => view('admin.users'))->name('users');
+    });

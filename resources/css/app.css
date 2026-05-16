@@ -1,3 +1,82 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        font-family: 'DM Sans', sans-serif;
+    }
+}
+
+@layer components {
+    .bg-mesh {
+        background-color: #f0f4ff;
+        background-image:
+            radial-gradient(at 20% 30%, #ffe8d6 0px, transparent 55%),
+            radial-gradient(at 80% 10%, #dbeafe 0px, transparent 50%),
+            radial-gradient(at 60% 90%, #fce7f3 0px, transparent 45%);
+    }
+
+    .card {
+        animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .input-field {
+        @apply w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus {
+        @apply border-orange-500;
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        outline: none;
+    }
+    .input-field.error {
+        @apply border-red-500;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+
+    .btn-primary {
+        @apply w-full rounded-xl py-3 text-white font-semibold text-sm tracking-wide;
+        background: #F97316;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+        background: #EA6C0A;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+    }
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .shake {
+        animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    .error-msg {
+        animation: fadeIn 0.2s ease;
+    }
+
+    .strength-bar {
+        height: 4px;
+        border-radius: 9999px;
+        transition: width 0.3s, background 0.3s;
+    }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
