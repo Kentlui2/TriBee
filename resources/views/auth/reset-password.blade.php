@@ -6,7 +6,7 @@
         @csrf
         <input type="hidden" name="token" value="{{ $token }}">
 
-        {{-- Email --}}
+        {{-- Email --}} {{-- G1 - Member 1: Frontend Auth UI DENZON --}}
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-900 mb-1.5">Email address</label>
             <input
