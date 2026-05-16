@@ -1,5 +1,5 @@
 <?php
-
+// G1 - Member 6: Module routes for authenticated and admin routes CAPAPAS
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Auth;
