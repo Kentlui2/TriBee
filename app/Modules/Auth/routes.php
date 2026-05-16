@@ -1,7 +1,7 @@
 <?php
+
 // G1 - Member 6: Module routes for authenticated and admin routes CAPAPAS
-use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\IsAdmin;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // ── Protected (Authenticated) Routes ─────────────────
-Route::middleware([Authenticate::class])->group(function () {
+Route::middleware(['auth'])->group(function () {
     
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', fn() => view('profile.dashboard'))->name('dashboard');
@@ -27,7 +27,7 @@ Route::middleware([Authenticate::class])->group(function () {
 });
 
 // ── Admin-Only Routes ────────────────────────────────
-Route::middleware([Authenticate::class, IsAdmin::class])
+Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
