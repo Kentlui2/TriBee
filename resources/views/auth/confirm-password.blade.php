@@ -4,7 +4,7 @@
 
     <form id="confirmForm" action="{{ route('password.confirm') }}" method="POST" novalidate>
         @csrf
-
+{{-- G1 - Member 1: Frontend Auth UI DENZON --}}
         <div class="mb-6">
             <label for="password" class="block text-sm font-medium text-gray-900 mb-1.5">Password</label>
             <div class="relative">

@@ -1,10 +1,11 @@
 <?php
-
+// G1 - Member 6: DevOps/Lead - Authentication Gatekeeper CAPAPAS
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class Authenticate
 {

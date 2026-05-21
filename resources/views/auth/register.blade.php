@@ -5,7 +5,7 @@
     <form id="registerForm" action="{{ route('register') }}" method="POST" novalidate>
         @csrf
 
-        {{-- Name --}}
+        {{-- Name --}} {{-- G1 - Member 1: Frontend Auth UI DENZON --}}
         <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-900 mb-1.5">Full name</label>
             <input

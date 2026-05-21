@@ -1,5 +1,7 @@
 <?php
 
+// G1 - Member 6: DevOps/Lead - Admin Role Middleware / CAPAPAS JUSTINE
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -15,10 +17,18 @@ class IsAdmin
                 ->with('error', 'Please log in first.');
         }
 
-        if (!Auth::user()->is_admin) {
-            abort(403, 'Unauthorized. Admin access only.');
+        $user = Auth::user();
+
+        // Check using role relationship (if Member 5 sets it up)
+        if ($user->role && $user->role->name === 'admin') {
+            return $next($request);
         }
 
-        return $next($request);
+        // Fallback: check is_admin boolean (for backward compatibility)
+        if ($user->is_admin) {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized. Admin access only.');
     }
 }
