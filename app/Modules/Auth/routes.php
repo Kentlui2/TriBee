@@ -1,9 +1,11 @@
 <?php
 
-// G1 - Member 6: Module routes for authenticated and admin routes CAPAPAS
+// G1 - Member 6: Module routes for authenticated and admin routes
+// G1 - Member 2: Profile web routes added
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Modules\Auth\Controllers\ProfileWebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 // ── Protected (Authenticated) Routes ─────────────────
 Route::middleware(['auth'])->group(function () {
-    
+
     Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', fn() => view('profile.dashboard'))->name('dashboard');
-        Route::get('/edit', fn() => view('profile.edit'))->name('edit');
-        Route::get('/addresses', fn() => view('profile.addresses'))->name('addresses');
+        Route::get('/', [ProfileWebController::class, 'show'])->name('dashboard');
+        Route::get('/edit', [ProfileWebController::class, 'edit'])->name('edit');
+        Route::get('/addresses', [ProfileWebController::class, 'addresses'])->name('addresses');
     });
 
     Route::post('/logout', function () {
