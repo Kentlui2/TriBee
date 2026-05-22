@@ -4,7 +4,6 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\IsAdmin;
 use App\Modules\Auth\Controllers\AuthController;
 use App\Modules\Auth\Controllers\ProfileController;
-use App\Modules\Auth\Controllers\ProfileWebController;
 use Illuminate\Support\Facades\Route;
 
 // ── Guest Routes ─────────────────────────────
@@ -18,9 +17,9 @@ Route::middleware(['auth'])->group(function () {
     
     // Profile views
     Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', [ProfileWebController::class, 'show'])->name('dashboard');
-        Route::get('/edit', [ProfileWebController::class, 'edit'])->name('edit');
-        Route::get('/addresses', [ProfileWebController::class, 'addresses'])->name('addresses');
+        Route::get('/', fn() => view('profile.dashboard'))->name('dashboard');
+        Route::get('/edit', fn() => view('profile.edit'))->name('edit');
+        Route::get('/addresses', fn() => view('profile.addresses'))->name('addresses');
     });
 
     // Profile API
@@ -34,7 +33,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/addresses/{id}', [ProfileController::class, 'destroyAddress'])->name('addresses.destroy');
     });
 
-    
 });
 
 // ── Admin-Only Routes ────────────────────────
