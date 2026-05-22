@@ -1,4 +1,4 @@
-<?php //neil
+<?php
 
 namespace App\Modules\Products\Models;
 
@@ -7,30 +7,31 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+// Entity: Product
+// Managed by: Member 5 Norhalija (Database & Schema Integrity)
+
 class Product extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'category_id',
-        'image',
+        'category_id', 
+        'name', 
+        'brand', 
+        'description', 
+        'price', 
+        'slug',
+        'images',
+        'specifications'
     ];
 
-    protected $casts = [
-        'price' => 'decimal:2',
-        'category_id' => 'integer',
-    ];
-
-    protected $with = ['inventory'];
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
     public function inventory(): HasOne
     {
         return $this->hasOne(Inventory::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 }
