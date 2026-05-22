@@ -19,16 +19,16 @@ class IsAdmin
 
         $user = Auth::user();
 
-        // Check using role relationship (if Member 5 sets it up)
+        // 1. Check using role relationship (Restored Member 5's work)
         if ($user->role && $user->role->name === 'admin') {
             return $next($request);
         }
 
-        // Fallback: check is_admin boolean (for backward compatibility)
+        // 2. Fallback: Loose check (Handles true, 1, or '1' perfectly for everyone)
         if ($user->is_admin) {
             return $next($request);
         }
 
-        abort(403, 'Unauthorized. Admin access only.');
+        abort(403, 'Unauthorized: Admin access only.');
     }
 }
