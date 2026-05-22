@@ -15,8 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth'   => \App\Http\Middleware\Authenticate::class,
             'isAdmin' => \App\Http\Middleware\IsAdmin::class,
+            
         ]);
+        $middleware->redirectTo(
+            guests: '/login',
+            
+
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
+
     })->create();
