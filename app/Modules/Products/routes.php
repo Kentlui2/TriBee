@@ -8,17 +8,19 @@ use App\Modules\Products\Controllers\CategoryController;
 use App\Modules\Products\Controllers\CatalogController;
 
 // TASK ASSIGNMENT: SYSTEM INTERCEPTION & GATEWAY LAYERS (Member 1 - Billiones)
-Route::match(['get', 'post'], '/dashboard', [ProductController::class, 'index'])->name('dashboard');
+//Route::match(['get', 'post'], '/dashboard', [ProductController::class, 'index'])->name('dashboard');
 
 // 1. PUBLIC STOREFRONT ROUTES (Accessible to all logged-in users)
 //CORE TASK: MEMBER 1 (Billiones - Frontend Storefront Integration)
-Route::prefix('dashboard')->name('products.')->group(function () {
-    Route::get('/', [ProductController::class, 'index'])->name('index');
-    Route::get('/search', [ProductController::class, 'search'])->name('search');
-    Route::get('/category/{categoryId}', [ProductController::class, 'byCategory'])->name('by-category');
-    Route::get('/{id}', [ProductController::class, 'show'])->name('show');
-});
-
+// Route::prefix('dashboard')->name('products.')->group(function () {
+//     Route::get('/', [ProductController::class, 'index'])->name('index');
+//     Route::get('/search', [ProductController::class, 'search'])->name('search');
+//     Route::get('/category/{categoryId}', [ProductController::class, 'byCategory'])->name('by-category');
+//     Route::get('/{id}', [ProductController::class, 'show'])->name('show');
+// });
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 Route::prefix('categories')->name('categories.')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('index');
     Route::get('/{id}', [CategoryController::class, 'show'])->name('show');

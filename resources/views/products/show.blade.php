@@ -100,16 +100,28 @@
                     </div>
 
                     <div class="mt-auto pt-4 border-t border-gray-100 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                        <button type="button" 
-                                class="flex-1 text-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                {{ ($product->inventory->stock ?? 0) <= 0 ? 'disabled' : '' }}>
-                            Add to Cart
-                        </button>
-                        <a href="/products" 
-                           class="sm:w-1/3 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 px-4 rounded-xl transition-colors border border-gray-200">
-                            Back
-                        </a>
-                    </div>
+    <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $product->id }}">
+        <input type="hidden" name="quantity" value="1">
+        
+        <button type="submit" 
+                class="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                {{ ($product->inventory->stock ?? 0) <= 0 ? 'disabled' : '' }}>
+            <span class="flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                </svg>
+                Add to Cart
+            </span>
+        </button>
+    </form>
+    
+    <a href="/products" 
+       class="sm:w-1/3 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 px-4 rounded-xl transition-colors border border-gray-200">
+        Back
+    </a>
+</div>
 
                 </div>
             </div>

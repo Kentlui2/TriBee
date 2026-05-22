@@ -17,8 +17,8 @@
     <body class="font-sans antialiased bg-gray-50 text-neutral-800">
         @include('layouts.navigation')
 
-        <main class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
-            {{ $slot }}
+        <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6">
+            @yield('content')
         </main>
 
         @stack('scripts')
