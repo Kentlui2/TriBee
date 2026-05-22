@@ -10,8 +10,8 @@ use Exception;
 
 class CategoryController extends Controller
 {
-
-    public function index(): JsonResponse
+// TASK ASSIGNMENT: MEMBER 1 (Billiones - Frontend Storefront Integration)
+    public function index(): JsonResponse // List all categories
     {
         try {
             $categories = Category::withCount('products')->get();
@@ -27,8 +27,8 @@ class CategoryController extends Controller
             ], 500);
         }
     }
-
-    public function store(Request $request): JsonResponse
+// TASK ASSIGNMENT: MEMBER 4 (Francis - Admin Inventory API Management)
+    public function store(Request $request): JsonResponse // Create category
     {
         try {
             // Replaced legacy external FormRequests with inline validation
@@ -51,7 +51,7 @@ class CategoryController extends Controller
             ], 400);
         }
     }
-
+// TASK ASSIGNMENT: MEMBER 1 (Billiones - Frontend Storefront Integration)
     public function show(int $id): JsonResponse
     {
         try {
@@ -77,6 +77,7 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+    //TASK ASSIGNMENT: MEMBER 4 (Francis - Admin Inventory API Management)
     public function update(Request $request, int $id): JsonResponse
     {
         try {
@@ -108,6 +109,7 @@ class CategoryController extends Controller
             ], 400);
         }
     }
+    // TASK ASSIGNMENT: MEMBER 4 (Francis - Admin Inventory API Management)
     public function destroy(int $id): JsonResponse
     {
         try {

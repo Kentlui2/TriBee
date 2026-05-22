@@ -11,7 +11,7 @@ use Exception;
 
 class ProductService
 {
-        // Search and Filter API (price, brand, rating) kesa  
+        // Search and Filter API (price, brand, rating) Memeber 3 Sayson  
     public function getAllProducts(
         ?int $categoryId = null,
         ?string $search = null,
@@ -58,12 +58,13 @@ class ProductService
 
         return $query->latest()->paginate($perPage);
     }
-
+    // Catalog/Product Page: Fetches specific product data.
+    // Managed by: Member 1 Billiones (Frontend Catalog)
     public function getProductById(int $id): Product
     {
         return Product::with(['category', 'inventory'])->findOrFail($id);
     }
-        //Admin panel API (Create, Update, Delete) jang
+        //Admin panel API (Create, Update, Delete) Member 4 Francis
     public function createProduct(array $data): Product
     {
         return DB::transaction(function () use ($data) {
@@ -84,7 +85,8 @@ class ProductService
             return $product->fresh(['category', 'inventory']);
         });
     }
-        //Update product
+        // Admin Action: Updates existing product and its inventory linkage.
+        //  Managed by: Member 4 (Admin Inventory API)
     public function updateProduct(int $id, array $data): Product
     {
         $product = $this->getProductById($id);
@@ -109,22 +111,27 @@ class ProductService
             return $product->fresh(['category', 'inventory']);
         });
     }
-
+    // Admin Action: Removes product from the catalog.
+    // Managed by: Member 4 Francis(Admin Inventory API)
     public function deleteProduct(int $id): bool
     {
         $product = $this->getProductById($id);
         return (bool) $product->delete();
     }
-
+    // Search/Filter: Wrapper for product keyword searching.
+    //Managed by: Member 3 Sayson (Search and Filter Logic)
     public function searchProducts(string $query, int $perPage = 15): LengthAwarePaginator
     {
         return $this->getAllProducts(search: $query, perPage: $perPage);
     }
-
-    public function getProductsByCategory(int $categoryId): Collection
+    // Catalog: Fetches products within a specific category.
+    //Managed by: Member 1 Billiones (Frontend Catalog)
+    public function getProductsByCategory(int $categoryId, int $perPage = 12): \Illuminate\Pagination\LengthAwarePaginator
     {
-        return Product::with(['inventory'])
+        return Product::with(['category', 'inventory'])
             ->where('category_id', $categoryId)
-            ->get();
+            ->latest()
+            ->paginate($perPage);
     }
+   
 }

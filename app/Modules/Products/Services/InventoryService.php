@@ -1,4 +1,4 @@
-<?php //france
+<?php 
 
 namespace App\Modules\Products\Services;
 
@@ -9,22 +9,26 @@ use Exception;
 
 class InventoryService
 {
-
+    // Data Retrieval: Fetches stock levels by product.
+    // Managed by: Member 4 Francis (Admin Inventory API)
     public function getByProductId(int $productId): ?Inventory
     {
         return Inventory::where('product_id', $productId)->first();
     }
-
+     // Data Retrieval: Fetches raw inventory row.
+     // Managed by: Member 4 (Admin Inventory API)
     public function getById(int $id): ?Inventory
     {
         return Inventory::find($id);
     }
-
+    // Data Reporting: Retrieves all stock items for audit.
+    // Managed by: Member 4 (Admin Inventory API)
     public function getAllInventory(): Collection
     {
         return Inventory::with('product')->get();
     }
-
+    // Admin Action: Initializes inventory for a new product.
+    // Managed by: Member 4 (Admin Inventory API)
     public function createInventory(array $data): Inventory
     {
         $existing = $this->getByProductId((int) $data['product_id']);
@@ -38,7 +42,8 @@ class InventoryService
             'stock'      => $data['stock'] ?? 0, // Corrected from quantity -> stock
         ]);
     }
-
+    //Admin Action: Updates existing stock levels.
+    // Managed by: Member 4 (Admin Inventory API)
     public function updateInventory(int $id, array $data): Inventory
     {
         $inventory = $this->getById($id);
@@ -53,6 +58,8 @@ class InventoryService
 
         return $inventory->fresh();
     }
+     // Logistics: Adds incoming stock to inventory.
+     // Managed by: Member 5 Norhalija (Database & Inventory Tracking)
 
     public function addStock(int $productId, int $quantity): Inventory
     {
@@ -66,7 +73,8 @@ class InventoryService
 
         return $inventory->fresh();
     }
-
+    //Logistics: Subtracts outgoing stock (manual adjustments).
+    //  Managed by: Member 5 (Database & Inventory Tracking) 
     public function removeStock(int $productId, int $quantity): Inventory
     {
         $inventory = $this->getByProductId($productId);
@@ -83,7 +91,8 @@ class InventoryService
 
         return $inventory->fresh();
     }
-    //checkStock(int $productId, int $qty): bool
+    // Core Integration: Atomic purchase logic with DB locking.
+    // Managed by: Member 6 Norkesa (Lead / Concurrency Control)
     public function securePurchase(int $productId, int $quantity): bool
     {
         return DB::transaction(function () use ($productId, $quantity) {
@@ -97,7 +106,8 @@ class InventoryService
             return false; // Out of stock or record missing
         });
     }
-    //decrementStock(int $productId, int $qty): void
+     //Integration API: Check if items can be added to cart.
+     //Managed by: Member 5 (Database & Inventory Tracking) 
     public function checkAvailability(int $productId, int $requestedQuantity): bool
     {
         $inventory = $this->getByProductId($productId);
@@ -108,7 +118,8 @@ class InventoryService
 
         return $inventory->stock >= $requestedQuantity;
     }
-
+     // Data Reporting: Filter for out-of-stock products.
+     // Managed by: Member 5 (Database & Inventory Tracking)
     public function getOutOfStockItems(): Collection
     {
         return Inventory::with('product')->where('stock', '<=', 0)->get();

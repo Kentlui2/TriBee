@@ -4,198 +4,211 @@ namespace App\Modules\Products\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Products\Services\ProductService;
-use Illuminate\Http\JsonResponse;
+use App\Modules\Products\Models\Product;
+use App\Modules\Products\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use Exception;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    /**
-     * PHP 8.2 Constructor Promotion
-     */
     public function __construct(
-        private readonly ProductService $productService
+        protected ProductService $productService
     ) {}
 
-    /**
-     * Display the Frontend Product Catalog Grid (BILLIONES)
-     * URL: http://127.0.0.1:8000/catalog
-     */
-    public function index(Request $request): View
+    // Storefront: Displays the catalog index with pagination.
+    // Managed by: Member 1 Billiones (Frontend Catalog)
+    public function AdminIndex(Request $request): View|\Illuminate\Http\RedirectResponse
     {
-        try {
-            // Fetches paginated products using your service layer filters
-            $products = $this->productService->getAllProducts(
-                categoryId: $request->integer('category_id') ?: null,
-                search: $request->string('search')->toString() ?: null,
-                perPage: $request->integer('per_page', 12) // Optimized 12 items for grid balance
-            );
-
-            // Renders Billiones' Blade file, passing the database records into it
-            return view('products::index', compact('products'));
-        } catch (Exception $e) {
-            abort(500, 'Error loading product catalog: ' . $e->getMessage());
+        // 🌟 SECURITY CHECK: Prevent Admins from accessing the User panel view layout
+        // Fixed: Uses 'is_admin == 1' to perfectly match the column name in phpMyAdmin
+        if (Auth::check() && Auth::user()->is_admin == 1) {
+            return redirect('/admin/products');
         }
+
+        // 1. Fetch all categories so your brand-new sidebar can render them immediately
+        $categories = Category::all();
+
+        // 2. Start query with inventory relations eager loaded to prevent undefined attributes
+        $query = Product::with(['inventory', 'category']);
+
+        // 3. Handle Sidebar Department Filtering
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        // 4. 🔍 ADVANCED SEARCH LOGIC: Now checks Name, Brand, Description, AND Category Name!
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                // Search regular product text attributes
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('brand', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  
+                  //  Cross-reference and search by the category's name field
+                  ->orWhereHas('category', function($categoryQuery) use ($searchTerm) {
+                      $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
+                  });
+            });
+        }
+
+        // Filter by specific brand selection
+        if ($request->filled('brand')) {
+            $query->where('brand', $request->input('brand'));
+        }
+
+        // Filter by minimum price boundary
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->input('min_price'));
+        }
+
+        // Filter by maximum price boundary
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->input('max_price'));
+        }
+
+        // Filter by explicit average product performance/review rating
+        if ($request->filled('rating')) {
+            $query->where('rating', '>=', $request->input('rating'));
+        }
+
+        // 5. Fetch the filtered products matrix
+        $products = $query->paginate(12);
+        
+        // 6. Return the layout view utilizing your Module's explicit namespace
+        return view('products.catalog.index', compact('products', 'categories'))
+            ->with('filters', $request->all());
     }
 
-    /**
-     * Display the Frontend Product Detail Page (LOVELY)
-     * URL: http://127.0.0.1:8000/catalog/{id}
-     */
+    // Combined Search and Filter Action (Handles the /catalog/search route seamlessly)
+    public function search(Request $request): View|\Illuminate\Http\RedirectResponse
+    {
+        return $this->AdminIndex($request);
+    }
+
+    // Storefront: Displays individual product details.
+    // Managed by: Member 1 Billiones (Frontend Catalog)
     public function show(int $id): View
     {
-        try {
-            $product = $this->productService->getProductById($id);
+        $product = Product::with('inventory')->findOrFail($id);
+        
+        return view('products.show', compact('product'));
+    }
 
-            if (!$product) {
-                abort(404, 'Product not found');
-            }
+    public function adminDashboard(): View
+    {
+        // Eager load the products and stock quantities for the management grid
+        $products = Product::with('inventory')->get();
 
-            // Renders Lovely's PDP presentation page passing the single model item
-            return view('products::show', compact('product'));
-        } catch (Exception $e) {
-            abort(404, 'Product presentation page failed to load.');
+        // Renders the dedicated admin file from your module view path
+        return view('products.admin', compact('products'));
+    }
+
+    // Admin Panel: Saves a new product via API/Form.
+    // Managed by: Member 4 Francis(Admin Inventory API)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|string|max:255',
+            'brand' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']) . '-' . time();
+
+        $product = Product::create($validated);
+        $product->inventory()->create(['stock' => $validated['stock']]);
+
+        // Redirect to the admin index instead of returning JSON
+        return redirect()->route('admin.products.index')
+                         ->with('success', 'Product added successfully!');
+    }
+
+    // Admin Panel: Updates existing product data.
+    // Managed by: Member 4 Francis(Admin Inventory API)
+    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $product = Product::findOrFail($id);
+
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'name'        => 'required|string|max:255',
+            'brand'       => 'required|string',
+            'description' => 'required|string',
+            'price'       => 'required|numeric|min:0',
+            'stock'       => 'required|integer|min:0',
+        ]);
+
+        $product->update([
+            'category_id' => $validated['category_id'],
+            'name'        => $validated['name'],
+            'brand'       => $validated['brand'],
+            'description' => $validated['description'],
+            'price'       => $validated['price'],
+        ]);
+
+        if ($product->inventory) {
+            $product->inventory->update(['stock' => $validated['stock']]);
+        } else {
+            $product->inventory()->create(['stock' => $validated['stock']]);
         }
+
+        // Redirect to the admin index with a success message
+        return redirect()->route('admin.products.index')
+                         ->with('success', 'Product updated successfully!');
+    }
+
+    //Admin Panel: Removes product from system.
+    // Managed by: Member 4 Francis(Admin Inventory API)
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        
+        // Redirect back to the admin page after the item is gone
+        return redirect()->route('admin.products.index')
+                         ->with('success', 'Product deleted successfully!');
+    }
+
+    // Admin Panel: Shows the form to create a new product.
+    // Managed by: Member 4 (Admin Inventory API)
+    public function create(): \Illuminate\View\View
+    {
+        // Fetch categories so the admin can choose one from a dropdown select menu
+        $categories = Category::all();
+        
+        return view('products.create', compact('categories'));
+    }
+
+    // Admin Panel: Shows the form to edit an existing product.
+    // Managed by: Member 4 (Admin Inventory API)
+    public function edit(int $id): \Illuminate\View\View
+    {
+        $product = Product::with('inventory')->findOrFail($id);
+        $categories = Category::all();
+        
+        return view('products.edit', compact('product', 'categories'));
     }
 
     /**
-     * Backend Admin Inventory API: Add a Product jang
+     * Fallback wrapper method to intercept dashboard hits and handle routing roles
+     * entirely inside our own workspace boundary.
      */
-    public function store(Request $request): JsonResponse
+    public function index(Request $request): View|\Illuminate\Http\RedirectResponse
     {
-        try {
-            $validated = $request->validate([
-                'name'              => 'required|string|max:255',
-                'description'       => 'nullable|string',
-                'price'             => 'required|numeric|min:0',
-                'category_id'       => 'required|integer|exists:categories,id',
-                'image'             => 'nullable|string',
-                'inventory'         => 'nullable|array',
-                'inventory.stock'   => 'nullable|integer|min:0',
-            ]);
-
-            $product = $this->productService->createProduct($validated);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Product created successfully',
-                'data'    => $product
-            ], 201);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+        // 🌟 FORCE ADMINS TO THEIR OWN PANEL ONLY
+        // Fixed: Uses 'is_admin == 1' to perfectly match the column name in phpMyAdmin
+        if (Auth::check() && Auth::user()->is_admin == 1) {
+            return redirect('/admin/products');
         }
-    }
 
-    /**
-     * Backend Admin Inventory API: Edit a Product jang
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        try {
-            $validated = $request->validate([
-                'name'              => 'nullable|string|max:255',
-                'description'       => 'nullable|string',
-                'price'             => 'nullable|numeric|min:0',
-                'category_id'       => 'nullable|integer|exists:categories,id',
-                'image'             => 'nullable|string',
-                'inventory'         => 'nullable|array',
-                'inventory.stock'   => 'nullable|integer|min:0',
-            ]);
-
-            $product = $this->productService->updateProduct($id, $validated);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Product updated successfully',
-                'data'    => $product
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
-        }
-    }
-
-    /**
-     * Backend Admin Inventory API: Delete a Product jang
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        try {
-            $this->productService->deleteProduct($id);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Product deleted successfully'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
-        }
-    }
-
-    /**
-     * Backend API Search Endpoint (Kept for asynchronous live components)kesa
-     */
-    public function search(Request $request): JsonResponse
-    {
-        try {
-            $query = $request->string('q')->toString();
-
-            if (empty($query)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Search query is required'
-                ], 400);
-            }
-
-            $products = $this->productService->searchProducts(
-                $query,
-                $request->integer('per_page', 15)
-            );
-
-            return response()->json([
-                'success' => true,
-                'data' => $products->items(),
-                'meta' => [
-                    'current_page' => $products->currentPage(),
-                    'last_page'    => $products->lastPage(),
-                    'per_page'     => $products->perPage(),
-                    'total'        => $products->total(),
-                ]
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Backend API Category Filtering (Kept for background data loops)kesa
-     */
-    public function byCategory(int $categoryId): JsonResponse
-    {
-        try {
-            $products = $this->productService->getProductsByCategory($categoryId);
-
-            return response()->json([
-                'success' => true,
-                'data'    => $products
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        // Regular users drop straight down into your public web catalog layout
+        return $this->AdminIndex($request);
     }
 }
