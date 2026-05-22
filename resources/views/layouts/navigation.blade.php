@@ -80,12 +80,12 @@
     </x-nav-link>
         {{-- 
         Group 2: Catalog/Inventory Integration
-        Managed by: Member 6 (Group 2 Lead)
+        Managed by: Member 6 NORKESA (Group 2 Lead)
         --}}
     <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
         {{ __('Product Catalog') }}
     </x-nav-link>
-</div>
+    </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

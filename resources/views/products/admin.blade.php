@@ -24,24 +24,22 @@
                     <span class="bg-[#A3AED0] rounded-[4px]"></span>
                 </div>
                 <h1 class="text-xl font-black text-gray-950">TriBee <span class="text-orange-500">Admin Control</span></h1>
-            </div> <div class="flex items-center gap-4">                       <form action="{{ route('admin.products.index') }}" method="GET" class="relative w-full max-w-lg">
-    <div class="relative">
-        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-        </span>
-       
-        <input type="text" 
-               name="search" nm
-               value="{{ request('search') }}" 
-               placeholder="Cari Barang..." 
-               class="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-full text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition">
-                 
-            </div>
-                </form>
-                                
-                <div x-data="{ open: false }" class="relative">
+            </div> <div class="flex items-center gap-4">    
+
+                {{-- Search Filter Section Managed by: Member 1 & Member 3 --}}
+       <div class="w-full md:max-w-xl">
+        <form action="{{ route('products.index') }}" method="GET" class="relative flex items-center bg-white rounded-full border border-gray-100 px-5 py-2.5 shadow-xs focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition">
+            @if(request('category_id'))
+                <input type="hidden" name="category_id" value="{{ request('category_id') }}">
+            @endif
+            <svg class="w-4 h-4 text-gray-400 mr-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search products..." class="w-full text-sm bg-transparent outline-none text-gray-700 placeholder-gray-400">
+            <button type="submit" class="hidden">Search</button>
+        </form>
+    </div>
+                    <div x-data="{ open: false }" class="relative">
                     <button @click="open = ! open" type="button" class="flex items-center gap-2 max-w-xs rounded-xl text-sm focus:outline-none p-1.5 bg-white border border-gray-200 shadow-sm transition hover:bg-gray-50 cursor-pointer">
                         <div class="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center text-white font-black text-xs uppercase">
                             {{ substr(Auth::user()->name, 0, 2) }}

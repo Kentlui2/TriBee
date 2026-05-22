@@ -38,7 +38,7 @@
             <svg class="w-4 h-4 text-gray-400 mr-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Barang..." class="w-full text-sm bg-transparent outline-none text-gray-700 placeholder-gray-400">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search products..." class="w-full text-sm bg-transparent outline-none text-gray-700 placeholder-gray-400">
             <button type="submit" class="hidden">Search</button>
         </form>
     </div>

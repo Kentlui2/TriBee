@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Products\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -22,7 +24,7 @@ class ProductController extends Controller
     // Managed by: Member 1 Billiones (Frontend Catalog)
     public function AdminIndex(Request $request): View|\Illuminate\Http\RedirectResponse
     {
-        // 🌟 SECURITY CHECK: Prevent Admins from accessing the User panel view layout
+        // SECURITY CHECK: Prevent Admins from accessing the User panel view layout
         // Fixed: Uses 'is_admin == 1' to perfectly match the column name in phpMyAdmin
         if (Auth::check() && Auth::user()->is_admin == 1) {
             return redirect('/admin/products');
@@ -39,7 +41,7 @@ class ProductController extends Controller
             $query->where('category_id', $request->input('category_id'));
         }
 
-        // 4. 🔍 ADVANCED SEARCH LOGIC: Now checks Name, Brand, Description, AND Category Name!
+        // 4. ADVANCED SEARCH LOGIC: Now checks Name, Brand, Description, AND Category Name!
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
             $query->where(function($q) use ($searchTerm) {
@@ -202,7 +204,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): View|\Illuminate\Http\RedirectResponse
     {
-        // 🌟 FORCE ADMINS TO THEIR OWN PANEL ONLY
+        // FORCE ADMINS TO THEIR OWN PANEL ONLY
         // Fixed: Uses 'is_admin == 1' to perfectly match the column name in phpMyAdmin
         if (Auth::check() && Auth::user()->is_admin == 1) {
             return redirect('/admin/products');

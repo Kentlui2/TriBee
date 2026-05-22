@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Products\Services;
 
 use App\Modules\Products\Models\Product;
@@ -132,6 +134,17 @@ class ProductService
             ->where('category_id', $categoryId)
             ->latest()
             ->paginate($perPage);
+    }
+
+    /**
+     * API Contract for G3 & G4: Get product with inventory info
+     * 
+     * @param int $productId
+     * @return Product Product with category and inventory relationships loaded
+     */
+    public function getProduct(int $productId): Product
+    {
+        return $this->getProductById($productId);
     }
    
 }

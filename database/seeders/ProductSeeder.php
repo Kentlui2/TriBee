@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -8,9 +10,6 @@ use App\Modules\Products\Models\Product;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         // TASK ASSIGNMENT: MEMBER 1 (Billiones - Frontend Storefront Integration)
@@ -51,7 +50,7 @@ class ProductSeeder extends Seeder
             'image_url' => 'https://images.unsplash.com/photo-1566577134770-3d85bb3a9cc4?auto=format&fit=crop&w=300&q=80'
         ]);
         
-        // 👤 TASK ASSIGNMENT: MEMBER 4 (Francis - Admin Inventory API Management)
+        //  TASK ASSIGNMENT: MEMBER 4 (Francis - Admin Inventory API Management)
         // SUB-TASK: Inventory Asset Generation & Structural Relationship Ingestion
         // --- Electronics ---
         $prod1 = Product::create([

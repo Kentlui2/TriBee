@@ -1,5 +1,7 @@
 <?php 
 
+declare(strict_types=1);
+
 namespace App\Modules\Products\Services;
 
 use App\Modules\Products\Models\Inventory;
@@ -123,5 +125,31 @@ class InventoryService
     public function getOutOfStockItems(): Collection
     {
         return Inventory::with('product')->where('stock', '<=', 0)->get();
+    }
+
+    /**
+     * API Contract for G3 (Cart) & G4 (Order): Check if product has enough stock
+     * 
+     * @param int $productId
+     * @param int $qty Quantity requested
+     * @return bool true if stock is available, false otherwise
+     */
+    public function checkStock(int $productId, int $qty): bool
+    {
+        return $this->checkAvailability($productId, $qty);
+    }
+
+    /**
+     * API Contract for G4 (Order): Decrement stock after order is placed
+     * Called by G4 checkout when order is confirmed
+     * 
+     * @param int $productId
+     * @param int $qty Quantity to decrement
+     * @return void
+     * @throws Exception if insufficient stock
+     */
+    public function decrementStock(int $productId, int $qty): void
+    {
+        $this->removeStock($productId, $qty);
     }
 }

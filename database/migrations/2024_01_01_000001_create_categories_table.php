@@ -1,4 +1,6 @@
 <?php 
+
+declare(strict_types=1);
 //Migration: Create Categories Table
  //Managed by: Member 5 Norhalija (Database & Schema Integrity)
 
