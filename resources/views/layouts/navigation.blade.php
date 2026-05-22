@@ -50,9 +50,9 @@
                         <hr class="my-1 border-gray-100">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
                                 Log Out
-                            </x-dropdown-link>
+                            </button>
                         </form>
                     </x-slot>
                 </x-dropdown>
@@ -82,7 +82,7 @@
             <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
             <form method="POST" action="{{ route('logout') }}" class="mt-2">
                 @csrf
-                <button class="text-sm text-red-500 font-medium">Log Out</button>
+                <button type="submit" class="text-sm text-red-500 font-medium">Log Out</button>
             </form>
         </div>
     </div>

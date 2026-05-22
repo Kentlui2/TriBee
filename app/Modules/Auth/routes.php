@@ -1,24 +1,21 @@
 <?php
 
-/**
- * G1 - Member 6: Justine (Capapas)
- * Module routes - authenticated, admin, and API routes
- */
-
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\IsAdmin;
+use App\Modules\Auth\Controllers\AuthController;
 use App\Modules\Auth\Controllers\ProfileController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Modules\Auth\Controllers\ProfileWebController;
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Group 1 — Auth Module Routes
-|--------------------------------------------------------------------------
-*/
+// ── Guest Routes ─────────────────────────────
+Route::middleware('guest')->group(function () {
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+});
 
-// ── Protected (Authenticated) Routes ─────────────────
+// ── Protected (Authenticated) Routes ─────────
 Route::middleware(['auth'])->group(function () {
-
+    
     // Profile views
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileWebController::class, 'show'])->name('dashboard');
@@ -26,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/addresses', [ProfileWebController::class, 'addresses'])->name('addresses');
     });
 
-    // Profile API (G1 - Member 4: Shaina)
+    // Profile API
     Route::prefix('api/profile')->name('api.profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'show'])->name('show');
         Route::put('/', [ProfileController::class, 'update'])->name('update');
@@ -37,14 +34,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/addresses/{id}', [ProfileController::class, 'destroyAddress'])->name('addresses.destroy');
     });
 
-    // Logout (G1 - Member 6: Justine)
-    Route::post('/logout', function () {
-        Auth::logout();
-        return redirect('/');
-    })->name('logout');
+    
 });
 
-// ── Admin-Only Routes (G1 - Member 6: Justine) ──────
+// ── Admin-Only Routes ────────────────────────
 Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->name('admin.')
