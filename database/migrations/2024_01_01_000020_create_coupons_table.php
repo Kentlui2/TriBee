@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('coupons', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 50)->unique();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('type');
+            $table->decimal('value', 10, 2);
+            $table->decimal('min_order_amount', 10, 2)->default(0);
+            $table->decimal('max_discount_amount', 10, 2)->nullable();
+            $table->integer('usage_limit')->nullable();
+            $table->integer('used_count')->default(0);
+            $table->integer('per_user_limit')->default(1);
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('coupon_usages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('coupon_id')->constrained('coupons')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->unsignedBigInteger('order_id')->nullable(); // No FK until G4 creates orders table
+            $table->decimal('discount_amount', 10, 2);
+            $table->timestamps();
+            
+            $table->index(['user_id', 'coupon_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('coupon_usages');
+        Schema::dropIfExists('coupons');
+    }
+};
