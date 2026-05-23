@@ -91,19 +91,23 @@ class PricingEngine
             return 0;
         }
 
-        $promoService = app(PromoCodeService::class);
-        $promo = $promoService->validate($promoCode);
+        try {
+            $promoService = app(PromoCodeService::class);
+            $promo = $promoService->validate($promoCode);
 
         if (!$promo) {
             return 0;
         }
 
         return match ($promo['type']) {
-            'percentage' => round($subtotal * ($promo['value'] / 100), 2),
+            'percentage' => round($subtotal * ((float) $promo['value'] / 100), 2),
             'fixed'      => min((float) $promo['value'], $subtotal),
             default      => 0,
         };
+    } catch (\Exception $e) {
+        return 0;
     }
+    }   
 
     /**
      * Calculate tax on an amount
