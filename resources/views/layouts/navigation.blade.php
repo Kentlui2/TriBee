@@ -104,6 +104,44 @@
         </div>
     </div>
 
+    <!-- Responsive Navigation Menu -->
+    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+        {{ __('Dashboard') }}
+    </x-nav-link>
+        {{-- 
+        Group 2: Catalog/Inventory Integration
+        Managed by: Member 6 NORKESA (Group 2 Lead)
+        --}}
+    <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+        {{ __('Product Catalog') }}
+    </x-nav-link>
+    </div>
+
+        <!-- Responsive Settings Options -->
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="px-4">
+                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('profile.edit')">
+                    {{ __('Profile') }}
+                </x-responsive-nav-link>
+
+                <!-- Authentication -->
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+
+                    <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                        {{ __('Log Out') }}
+                    </x-responsive-nav-link>
+                </form>
+               
+            </div>
     <!-- Mobile Menu -->
     <div x-show="open" x-transition class="sm:hidden border-t border-gray-100 bg-white">
         <div class="px-4 py-3 space-y-1">
