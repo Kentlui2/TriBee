@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
         // SUB-TASK 2: Cross-Seeder Execution Link
         // Group 2: Product Catalog & Inventory Module Seeder
         $this->call(ProductSeeder::class,);
+        $this->call(CouponSeeder::class);
     }
 }
