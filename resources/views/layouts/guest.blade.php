@@ -7,35 +7,24 @@
 
         <title>{{ config('app.name', 'TriBee') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('styles')
     </head>
-    <body class="font-sans antialiased bg-gradient-to-br from-slate-50 via-indigo-50/10 to-pink-50/20 min-h-screen">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 pb-10 px-4">
-            <div class="flex justify-center mb-8">
-                <a href="/" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center">
-                        <svg width="20" height="20" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="16" height="16" rx="4" fill="#fff"/>
-                            <rect x="20" width="16" height="16" rx="4" fill="#fff" opacity="0.7"/>
-                            <rect y="20" width="16" height="16" rx="4" fill="#fff" opacity="0.5"/>
-                            <rect x="20" y="20" width="16" height="16" rx="4" fill="#111" opacity="0.3"/>
-                        </svg>
-                    </div>
-                    <span class="text-2xl font-extrabold tracking-tight text-neutral-900">Tri<span class="text-orange-600">Bee</span></span>
-                </a>
-            </div>
+    <body class="font-sans antialiased min-h-screen bg-gradient-to-br from-slate-100 via-orange-50/50 to-amber-100/40 relative">
+        
+        <!-- Background blobs -->
+        <div class="fixed inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-72 h-72 bg-orange-300/30 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/3 -right-20 w-96 h-96 bg-amber-300/25 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 left-1/3 w-80 h-80 bg-orange-200/30 rounded-full blur-3xl"></div>
+        </div>
 
-            <div class="w-full sm:max-w-md card bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8">
-                {{ $slot }}
-            </div>
-
-            <p class="text-center text-xs text-gray-400 mt-6">&copy; {{ date('Y') }} TriBee. All rights reserved.</p>
+        <!-- Content -->
+        <div class="relative z-10 py-10 px-4 sm:px-6 lg:px-8">
+            {{ $slot }}
         </div>
 
         @stack('scripts')
