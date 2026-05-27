@@ -29,15 +29,14 @@ Route::middleware(['auth'])->group(function () {
 // ─── Admin Routes ──────────────────────────────
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     
-    // All orders dashboard
-    Route::get('/orders', [OrderController::class, 'adminIndex'])
+    // Point these to your new AdminOrderController
+    Route::get('/orders', [\App\Modules\Orders\Controllers\AdminOrderController::class, 'index'])
          ->name('orders.index');
     
-    // Update order status
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])
+    Route::patch('/orders/{order}/status', [\App\Modules\Orders\Controllers\AdminOrderController::class, 'update'])
          ->name('orders.update-status');
     
-    // View any order
-    Route::get('/orders/{order}', [OrderController::class, 'show'])
+    // Optional: Keep show if you need to view individual order details in admin
+    Route::get('/orders/{order}', [\App\Modules\Orders\Controllers\AdminOrderController::class, 'show'])
          ->name('orders.show');
 });

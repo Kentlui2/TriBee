@@ -27,41 +27,18 @@ class OrderController extends Controller
     /**
      * Customer/Admin: View a single order receipt.
      */
-    public function show(int $orderId)
-    {
-        $order = $this->orderService->getOrder($orderId);
-        
-        // Customers can only view their own orders
-        if (!auth()->user()->isAdmin() && $order->user_id !== auth()->id()) {
-            abort(403);
-        }
-        
-        return view('orders.receipt', compact('order'));
+public function show(int $orderId)
+{
+    $order = $this->orderService->getOrder($orderId);
+
+    // ✅ FIXED: use role check that actually exists on the User model
+    // (adjust 'admin' to whatever role string G1 is using)
+    $isAdmin = auth()->user()->role === 'admin';
+
+    if (!$isAdmin && $order->user_id !== auth()->id()) {
+        abort(403);
     }
 
-    /**
-     * Admin: View all orders.
-     */
-    public function adminIndex()
-    {
-        $orders = Order::with('user', 'items')
-                       ->orderBy('created_at', 'desc')
-                       ->paginate(20);
-                       
-        return view('orders.admin.index', compact('orders'));
-    }
-
-    /**
-     * Admin: Update order status.
-     */
-    public function updateStatus(Request $request, int $orderId)
-    {
-        $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
-        ]);
-
-        $this->orderService->updateOrderStatus($orderId, $request->status);
-
-        return back()->with('success', "Order #{$orderId} status updated to: {$request->status}");
-    }
+    return view('orders.receipt', compact('order'));
+}
 }

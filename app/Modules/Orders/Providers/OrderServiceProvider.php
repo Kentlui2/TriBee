@@ -4,32 +4,29 @@ declare(strict_types=1);
 
 namespace App\Modules\Orders\Providers;
 
+use App\Modules\Cart\Services\CartService;
+use App\Modules\Cart\Services\PricingEngine;
+use App\Modules\Orders\Services\OrderService;
+use App\Modules\Products\Services\InventoryService;
+use App\Modules\Products\Services\ProductService;
 use Illuminate\Support\ServiceProvider;
 
 class OrderServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        // This tells Laravel to load your routes file
-        $this->loadRoutesFrom(__DIR__ . '/../routes.php');
+
     }
 
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        // This is where you register your Services so they can be 
-        // used via Dependency Injection in your Controllers.
-        $this->app->singleton(\App\Modules\Orders\Services\OrderService::class, function ($app) {
-            return new \App\Modules\Orders\Services\OrderService();
-        });
-
-        $this->app->singleton(\App\Modules\Orders\Services\CheckoutService::class, function ($app) {
-            return new \App\Modules\Orders\Services\CheckoutService();
+        $this->app->singleton(OrderService::class, function ($app) {
+            return new OrderService(
+                $app->make(CartService::class),
+                $app->make(InventoryService::class),
+                $app->make(ProductService::class),
+                $app->make(PricingEngine::class),
+            );
         });
     }
 }
