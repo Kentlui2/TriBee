@@ -39,4 +39,5 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
     // Optional: Keep show if you need to view individual order details in admin
     Route::get('/orders/{order}', [\App\Modules\Orders\Controllers\AdminOrderController::class, 'show'])
          ->name('orders.show');
+    
 });

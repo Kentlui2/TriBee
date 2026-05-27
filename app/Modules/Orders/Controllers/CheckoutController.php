@@ -23,12 +23,22 @@ class CheckoutController extends Controller
      * STEP 1: Shipping form
      */
     public function shipping()
+<<<<<<< Updated upstream
     {
         $cartItems = $this->cartService ->getCartItems(Auth::id());
         $cartTotal = $this->cartService ->getCartTotal(Auth::id());
 
         return view('orders.checkout.shipping', compact('cartItems', 'cartTotal'));
     }
+=======
+{
+    // $cartItems = $this->cartService->getCartItems(Auth::id()); 
+    $cartItems = []; // Mock data
+    $cartTotal = 0.00; // Mock data
+    
+    return view('orders.checkout.shipping', compact('cartItems', 'cartTotal'));
+}
+>>>>>>> Stashed changes
 
     /**
      * STEP 2: Review order before confirming
