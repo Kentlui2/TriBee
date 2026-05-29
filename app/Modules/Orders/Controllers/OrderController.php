@@ -20,25 +20,23 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = $this->orderService->getUserOrders(auth()->id());
-        return view('orders.index', compact('orders'));
+        $orders = Order::with('items', 'user')->latest()->paginate(15);
+        return view('orders.admin.index', compact('orders'));
     }
 
     /**
      * Customer/Admin: View a single order receipt.
      */
-public function show(int $orderId)
-{
-    $order = $this->orderService->getOrder($orderId);
+    public function show(int $orderId)
+    {
+        $order = $this->orderService->getOrder($orderId);
 
-    // ✅ FIXED: use role check that actually exists on the User model
-    // (adjust 'admin' to whatever role string G1 is using)
-    $isAdmin = auth()->user()->role === 'admin';
+        $isAdmin = auth()->user()->is_admin;
 
-    if (!$isAdmin && $order->user_id !== auth()->id()) {
-        abort(403);
+        if (!$isAdmin && $order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('orders.receipt', compact('order'));
     }
-
-    return view('orders.receipt', compact('order'));
-}
 }

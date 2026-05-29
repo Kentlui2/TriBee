@@ -2,28 +2,38 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Modules\Auth\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // 1Default User Account (is_admin set to 0)
-        // User::factory(10)->create();
-     $this->call(RoleSeeder::class);
-     
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-        // SUB-TASK 2: Cross-Seeder Execution Link
-        // Group 2: Product Catalog & Inventory Module Seeder
-        $this->call(ProductSeeder::class,);
+        $this->call(RoleSeeder::class);
+
+        // ✅ firstOrCreate — won't crash if user already exists
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name'              => 'Test User',
+                'password'          => Hash::make('password'),
+                'email_verified_at' => now(),
+                'is_admin'          => false,
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name'              => 'Admin',
+                'password'          => Hash::make('password'),
+                'email_verified_at' => now(),
+                'is_admin'          => true,
+            ]
+        );
+
+        $this->call(ProductSeeder::class);
         $this->call(CouponSeeder::class);
     }
 }

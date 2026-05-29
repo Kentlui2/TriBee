@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Modules\Orders\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Cart\Services\CartService;
 use App\Modules\Orders\Services\OrderService;
-use App\Modules\Cart\Services\CartService;  // ✅ FIXED
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,35 +14,20 @@ class CheckoutController extends Controller
 {
     public function __construct(
         private OrderService $orderService,
-        private CartService $cartService        // ✅ FIXED
+        private CartService $cartService
     ) {
-        $this->middleware('auth');
+        // ✅ REMOVED $this->middleware('auth') — Laravel 11 doesn't support this
+        // Auth is already handled in routes.php via Route::middleware(['auth'])
     }
 
-    /**
-     * STEP 1: Shipping form
-     */
     public function shipping()
-<<<<<<< Updated upstream
     {
-        $cartItems = $this->cartService ->getCartItems(Auth::id());
-        $cartTotal = $this->cartService ->getCartTotal(Auth::id());
+        $cartItems = $this->cartService->getCartItems(Auth::id());
+        $cartTotal = $this->cartService->getCartTotal(Auth::id());
 
         return view('orders.checkout.shipping', compact('cartItems', 'cartTotal'));
     }
-=======
-{
-    // $cartItems = $this->cartService->getCartItems(Auth::id()); 
-    $cartItems = []; // Mock data
-    $cartTotal = 0.00; // Mock data
-    
-    return view('orders.checkout.shipping', compact('cartItems', 'cartTotal'));
-}
->>>>>>> Stashed changes
 
-    /**
-     * STEP 2: Review order before confirming
-     */
     public function review(Request $request)
     {
         $request->validate([
@@ -50,27 +35,21 @@ class CheckoutController extends Controller
             'contact_number'   => 'required|string|min:7',
         ]);
 
-        $cartItems = $this->cartService ->getCartItems(Auth::id());
-        $cartTotal = $this->cartService ->getCartTotal(Auth::id());
+        $cartItems = $this->cartService->getCartItems(Auth::id());
+        $cartTotal = $this->cartService->getCartTotal(Auth::id());
         $tax = $cartTotal * 0.12;
         $shippingFee = 150.00;
         $grandTotal = $cartTotal + $tax + $shippingFee;
 
-        // Store checkout data in session for the final step
-        session(['checkout_data' => $request->only(['shipping_address', 'contact_number', 'notes'])]);
+        session(['checkout_data' => $request->only([
+            'shipping_address', 'contact_number', 'notes'
+        ])]);
 
         return view('orders.checkout.review', compact(
-            'cartItems',
-            'cartTotal',
-            'tax',
-            'shippingFee',
-            'grandTotal'
+            'cartItems', 'cartTotal', 'tax', 'shippingFee', 'grandTotal'
         ));
     }
 
-    /**
-     * STEP 3: Place the order (final confirmation)
-     */
     public function confirm()
     {
         $checkoutData = session('checkout_data');
@@ -82,7 +61,6 @@ class CheckoutController extends Controller
 
         try {
             $order = $this->orderService->placeOrder(Auth::id(), $checkoutData);
-
             session()->forget('checkout_data');
 
             return redirect()->route('orders.receipt', $order->id)

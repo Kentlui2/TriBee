@@ -93,12 +93,13 @@ class OrderService
     {
         return Order::with('items')->findOrFail($orderId);
     }
-
+    
     public function getUserOrders(int $userId): Collection
     {
-        return Order::where('user_id', $userId)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        return Order::with('items')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function updateOrderStatus(int $orderId, string $status): void
