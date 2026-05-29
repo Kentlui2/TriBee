@@ -11,8 +11,9 @@ class CouponSeeder extends Seeder
 {
     public function run(): void
     {
-        Coupon::create([
+        Coupon::firstOrCreate([
             'code' => 'WELCOME10',
+        ], [
             'name' => 'Welcome Discount',
             'description' => '10% off your first order',
             'type' => 'percentage',
@@ -24,8 +25,9 @@ class CouponSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Coupon::create([
+        Coupon::firstOrCreate([
             'code' => 'SAVE500',
+        ], [
             'name' => '₱500 Off',
             'description' => 'Get ₱500 off on orders above ₱5,000',
             'type' => 'fixed',
@@ -36,8 +38,9 @@ class CouponSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Coupon::create([
+        Coupon::firstOrCreate([
             'code' => 'FLASH20',
+        ], [
             'name' => 'Flash Sale 20%',
             'description' => '20% off - limited time only',
             'type' => 'percentage',
@@ -50,8 +53,9 @@ class CouponSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Coupon::create([
+        Coupon::firstOrCreate([
             'code' => 'LOYAL5',
+        ], [
             'name' => 'Loyalty Discount',
             'description' => '5% off for our loyal customers',
             'type' => 'percentage',
@@ -62,8 +66,9 @@ class CouponSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Coupon::create([
+        Coupon::firstOrCreate([
             'code' => 'FREESHIP',
+        ], [
             'name' => 'Free Shipping',
             'description' => 'Free shipping on your order',
             'type' => 'fixed',

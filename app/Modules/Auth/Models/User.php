@@ -16,6 +16,11 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
+
     protected function casts(): array
     {
         return [

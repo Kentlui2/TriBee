@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Modules\Auth\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,17 +13,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1Default User Account (is_admin set to 0)
-        // User::factory(10)->create();
-     $this->call(RoleSeeder::class);
-     
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-        // SUB-TASK 2: Cross-Seeder Execution Link
-        // Group 2: Product Catalog & Inventory Module Seeder
-        $this->call(ProductSeeder::class,);
+        $this->call(RoleSeeder::class);
+
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $this->call(ProductSeeder::class);
         $this->call(CouponSeeder::class);
     }
 }
