@@ -23,5 +23,5 @@ require __DIR__.'/auth.php';
 require base_path('app/Modules/Auth/routes.php');
 require base_path('app/Modules/Products/routes.php');   
 require base_path('app/Modules/Cart/routes.php');       // G3
-// require base_path('app/Modules/Orders/routes.php');     // G4
+require base_path('app/Modules/Orders/routes.php');     // G4
 // require base_path('app/Modules/Payment/routes.php');    // G5
