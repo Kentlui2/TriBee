@@ -3,10 +3,10 @@
 > A full-featured Laravel e-commerce platform built as a collaborative group project. I served as **DevOps Lead** and built the entire **Orders & Checkout module**.
 
 <p align="center">
-  <img src="./assets/screenshots/checkout-shipping.png" width="23%" />
-  <img src="./assets/screenshots/checkout-review.png" width="23%" />
-  <img src="./assets/screenshots/checkout-confirmed.png" width="23%" />
-  <img src="./assets/screenshots/order-management.png" width="23%" />
+  <img src="./assets/screenshots/checkout-shipping.jpg" width="23%" />
+  <img src="./assets/screenshots/checkout-review.jpg" width="23%" />
+  <img src="./assets/screenshots/checkout-confirmed.jpg" width="23%" />
+  <img src="./assets/screenshots/order-management.jpg" width="23%" />
 </p>
 
 ---
@@ -58,11 +58,11 @@ I designed and built the entire order flow from cart to confirmation:
 
 | Checkout — Shipping | Checkout — Review |
 |:-:|:-:|
-| ![Shipping](./assets/screenshots/checkout-shipping.png) | ![Review](./assets/screenshots/checkout-review.png) |
+| ![Shipping](./assets/screenshots/checkout-shipping.jpg) | ![Review](./assets/screenshots/checkout-review.jpg) |
 
 | Order Confirmed | Order Management (Admin) |
 |:-:|:-:|
-| ![Confirmed](./assets/screenshots/checkout-confirmed.png) | ![Management](./assets/screenshots/order-management.png) |
+| ![Confirmed](./assets/screenshots/checkout-confirmed.jpg) | ![Management](./assets/screenshots/order-management.jpg) |
 
 ---
 
